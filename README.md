@@ -1,5 +1,10 @@
 # gcb-lambda
 
+**Want to explore this with another AI chat (ChatGPT, Gemini, etc.)
+that has no access to this repo?** Paste
+[`EXTERNAL_AI_BRIEFING.md`](EXTERNAL_AI_BRIEFING.md) — it's
+self-contained, no repo access required.
+
 **One isolated problem: the program's own documentation says "the
 laser/modulator bank has zero real spec" — that's only true for the
 Phase-II scale-up. Reconcile what's actually on file for Phase I first,
