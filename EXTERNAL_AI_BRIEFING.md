@@ -5,15 +5,21 @@ below. This is one isolated problem from a larger hardware program
 (GreenCoyote-Bay, a photonic/electronic AI-inference accelerator); you
 are being asked to help with exactly this one piece, nothing more.
 
-## The problem, in one sentence
+## The problem, in one sentence — updated 2026-09-13, the reconciliation below is DONE
 
-The program's own documentation calls the laser/modulator light source
-"CONCEPT ONLY... the least-specified part in the entire inventory" —
-**that's wrong as a blanket claim.** Two real (if modest) Phase-I bench
-laser designs already exist, in two different spec files, apparently
-for two different sub-experiments, never reconciled against each
-other or against that blanket claim. Separately, the real *scaled-up*
-target configuration has **genuinely zero** optical-source spec.
+The program's own documentation used to call the laser/modulator light
+source "CONCEPT ONLY... the least-specified part in the entire
+inventory" — that blanket claim has been corrected. **What's actually
+true, confirmed by careful reading**: two real Phase-I bench documents
+describe the *same* bench (not two separate sub-experiments, as an
+earlier pass here had guessed) but disagree on laser **count** — filed
+as a real architecture conflict for human disposition, not resolved
+by an AI. **The remaining open question is different and narrower**:
+what would a laser/modulator design need to look like for the real,
+locked *Phase-II* 64-channel scaled target, which has genuinely zero
+spec either way. See the bottom of this file for that actual question
+— read the reconciliation below for context, but don't spend effort
+re-litigating it; it's settled.
 
 ## What already exists — two real designs, quoted in full
 
@@ -68,23 +74,25 @@ attenuation-vs-control-voltage curve is smooth/monotonic — a more
 direct path to 8-bit-linear control.
 
 This is **ONE shared laser**, externally intensity-modulated by one
-VOA, feeding (confirmed by cross-checking `gcb-wiki/02_receiver_architecture.md`'s
-"Phase I — Guaranteed Bench" section) a **reference-tap / result-tap
-ratiometric-cancellation readout** — a completely different apparatus,
-for testing "does the detection/ENOB mechanism work," not the
-summation mechanism.
+VOA, split via a 1×8 PM splitter into a reference leg and
+result-combination legs feeding (confirmed by cross-checking
+`gcb-wiki/02_receiver_architecture.md`'s "Phase I — Guaranteed Bench"
+section) a **reference-tap / result-tap ratiometric-cancellation
+readout**.
 
-## The working hypothesis — check this first
+## Resolved — this was the same bench, not two different ones
 
-**These are probably two different, compatible pieces of bench
-apparatus for two different sub-experiments** — not a contradiction.
-One needs N independent sources to literally sum; the other needs one
-source split into two taps to cancel common-mode loss. Nobody has
-written that distinction down anywhere; the program's own component
-inventory (`gcb-wiki/16_hardware_parts_systems_specification.md` Part
-9) describes "the laser/modulator bank" as one monolithic,
-totally-unspecified thing, which is simply wrong given the two real
-designs above.
+**An earlier pass here guessed Design A and Design B were two
+different, compatible sub-experiments. That guess was wrong, corrected
+by reading more carefully**: both documents explicitly label themselves
+"Task 3," and `02_receiver_architecture.md`'s own "Phase I — Guaranteed
+Bench" section states one combined purpose (proving optical-summation
+*and* ratiometric-cancellation together) — this is **one bench**, and
+the two documents simply **disagree on how many lasers it uses**: N
+independent diodes (Design A) vs. one diode split N ways (Design B).
+That conflict has been filed as a real architecture question for human
+disposition (this program's `GCB-043`) — **not something to resolve
+here**; don't re-litigate it.
 
 ## What genuinely has zero spec, confirmed
 
@@ -110,25 +118,24 @@ encounter for this system as unconfirmed unless it traces to a real
 spec document — the locked geometry spec above explicitly says "no
 channel mux."
 
-## The actual question to help with
+## The actual question to help with — the reconciliation above is done, this is what's left
 
-1. **Confirm or refute the working hypothesis above**: are Design A
-   and Design B genuinely compatible (two different experiments), or
-   is there a real conflict a careful read reveals? If compatible,
-   what's the clearest way to document both without conflating them
-   under one "laser bank" label?
-2. **Scope the real gap**: starting from the locked `N=64`/`L=16`
-   digital sizing, with *zero* existing optical-source spec to build
-   from — does scaling either Phase-I bench design (N≈8) to N=64 stay
-   architecturally the same (just "more of the same lasers/VOAs"), or
-   does 64 channels force a genuinely different approach (an actual
-   laser array, integrated modulators, or something else)? What are
-   the real engineering tradeoffs at that scale (thermal management for
-   64 co-located sources, power budget, calibration complexity)?
+**Scope the real gap**: starting from the locked `N=64`/`L=16` digital
+sizing, with *zero* existing optical-source spec to build from (neither
+Design A nor Design B addresses 64 channels — both are Phase-I setups
+at 4–8 inputs) — does scaling either Phase-I design (N≈8) up to N=64
+stay architecturally the same (just "more of the same lasers/VOAs," in
+whichever count Design A/B's conflict eventually resolves to), or does
+64 channels force a genuinely different approach (an actual laser
+array, integrated modulators, or something else)? What are the real
+engineering tradeoffs at that scale — thermal management for 64
+co-located sources, power budget, calibration complexity across that
+many channels, and whether the N-vs-1-split question even stays
+meaningful at 8x the scale?
 
-**How to work this problem (the house style for this program):** cite
-the exact document/section for every claim. Don't assume WDM or any
-other architecture not directly supported by the two documents quoted
-above. Treat "I don't know, here's what would need to be decided
-first" as a complete, valid answer for part 2 — this genuinely is an
-open question, not one with a hidden right answer.
+**House rule**: cite the exact document/section for every claim. Don't
+assume wavelength-division multiplexing or any "8×8 unitary mesh"
+framing beyond what's directly supported by the locked spec above,
+which explicitly says "no channel mux." "I don't know, here's what
+would need deciding first" is a completely valid answer — this
+genuinely is an open question, not one with a hidden right answer.

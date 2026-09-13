@@ -10,39 +10,52 @@ laser/modulator bank has zero real spec" — that's only true for the
 Phase-II scale-up. Reconcile what's actually on file for Phase I first,
 then spec what's genuinely missing for Phase II.**
 
-## The question, stated plainly — corrected from what the existing docs claim
+## The question, stated plainly — corrected twice now, each time by reading more carefully
 
 `gcb-wiki/16_hardware_parts_systems_specification.md` Part 9 calls the
 laser/modulator bank "**CONCEPT ONLY** ... the least-specified part in
 the entire inventory" with "no wavelength count, channel spacing, laser
 type, modulator type/bandwidth, [or] power budget ... recorded anywhere."
 
-**That is not accurate as a blanket claim, checked directly against
-`gcb-spec` this session.** Two real, if modest, Phase-I bench laser/
-modulator designs already exist — in two different files, describing
-what appear to be two different pieces of apparatus, never reconciled
-against each other or against Part 9's framing:
+**That is not accurate as a blanket claim.** Real Phase-I bench content
+exists. But — corrected from this repo's own first-draft reading —
+**it is not "two separate, compatible experiments."** Both documents
+below explicitly share the same **Task 3** designation
+(`bench_emulation_parameters.md`: *"Phase I Task 3 / Objective O3"*;
+`task3_physical_bom.md`: *"Task 3 — Phase-I Guaranteed Bench"*) and
+`gcb-wiki/02_receiver_architecture.md`'s own "Phase I — Guaranteed
+Bench" section states its purpose as proving **both** the
+optical-summation **and** ratiometric-cancellation physics together,
+not two separate tests. **These are two real specs for the *same*
+bench, disagreeing on how its light source is built:**
 
-1. **`gcb-spec/bench_emulation_parameters.md` §2.1–2.2** — the
-   **combiner/reduction-tree test bench**: 4 (minimum) to 8 (target)
-   separate O-band (~1310 nm) DFB-or-Fabry–Pérot laser diodes, **one per
-   leaf channel**, each directly intensity-modulated (8-bit/256-level)
-   by its own DAC channel, each TEC-stabilized, feeding the fused-fiber
-   combiner tree. Tests the "sum N optical signals" mechanism.
-2. **`gcb-spec/task3_physical_bom.md` §1** — the **readout/calibration
-   bench**: a single O-band (1310 nm) CW DFB laser (`GCB-LSR-01`,
-   `[CANDIDATE]`) through a single linear VOA intensity modulator
-   (`GCB-VOA-01`, `[CANDIDATE]`, decided over an LiNbO₃ MZ modulator per
-   `TKT-028`), feeding `gcb-wiki/02_receiver_architecture.md`'s
-   reference-tap/result-tap ratiometric-cancellation readout. Tests the
-   detection/ENOB mechanism, not the combiner.
+1. **`gcb-spec/bench_emulation_parameters.md` §2.1–2.2**: **4 to 8
+   separate** O-band (~1310 nm) DFB-or-Fabry–Pérot laser diodes, **one
+   per leaf channel**, each directly, individually intensity-modulated
+   (8-bit/256-level) by its own DAC channel, each TEC-stabilized,
+   feeding the fused-fiber combiner tree directly.
+2. **`gcb-spec/task3_physical_bom.md` §1–§2** (section 1 is titled
+   "Laser Source**s** & Modulation" but specifies exactly **one**):
+   **one** O-band (1310 nm) CW DFB laser (`GCB-LSR-01`, `[CANDIDATE]`)
+   through **one** linear VOA (`GCB-VOA-01`, `[CANDIDATE]`, decided
+   over an LiNbO₃ MZ modulator per `TKT-028`), then split via a **1×8
+   PM fiber splitter** (`GCB-SPLT-1X8`, `[TBD]`) into one reference leg
+   and up to seven result-combination legs feeding what this document
+   itself calls an "**8×8 unitary-mesh bench coupling emulation**" —
+   explicitly labeled a passive, single-wavelength COTS-splitter proxy,
+   *not* a real WDM/wavelength-multiplexed claim (so `TKT-033`'s core
+   finding — no real WDM anywhere in `gcb-spec` — still stands; only
+   the laser-*count* question is newly in question here).
 
-**These look like two different, compatible pieces of apparatus for two
-different sub-experiments — not a contradiction** (one needs N
-independent sources to sum; the other needs one source split to two taps
-to cancel common loss). But nobody has written that down. Part 9 treats
-"the laser bank" as one monolithic, unspecified thing, when Phase I
-actually has two real, separately-decided designs on file.
+**This is a real, unreconciled architecture question, not a reading
+error on either document's part: does the Task-3 bench use N
+independent laser diodes, or one laser split N ways?** Each choice has
+real, different consequences (per-channel power/wavelength matching
+and calibration for N independent diodes, vs. splitter insertion-loss
+budget and a single point of failure for the split approach) — this
+repo does not pick one. Filed as `GCB-043` for Architect disposition,
+the same way `TKT-031` filed the TIA-vs-switched-charge-integrator
+conflict rather than choosing unilaterally.
 
 **What genuinely has zero spec, confirmed by direct check:**
 `gcb-spec/docs/optical_geometry_spec.md` (LOCKED v1.0.0), which sizes the
@@ -55,14 +68,16 @@ digital sizing.
 
 ## What this repo needs to actually produce
 
-1. **Reconciliation, not new invention, first**: confirm or correct the
-   "two separate bench apparatuses" reading above directly against both
-   source files and `02_receiver_architecture.md`, and fix Part 9 of
-   `16_hardware_parts_systems_specification.md` to say what's actually
-   real for Phase I (this is a documentation-accuracy correction, the
-   same category as `GCB-040`/`GCB-041`'s register-map findings — not a
-   new architectural decision).
-2. **Only then**, scope the real, currently-nonexistent gap: what would
+1. ~~**Reconciliation, not new invention, first**: confirm or correct
+   the initial "two separate bench apparatuses" hypothesis directly
+   against both source files and `02_receiver_architecture.md`.~~
+   **Done, 2026-09-13**: the hypothesis was wrong — it's one bench,
+   two conflicting light-source specs, not two separate experiments.
+   `16_hardware_parts_systems_specification.md` Part 9 corrected to
+   describe what's real for Phase I (a documentation-accuracy fix,
+   same category as `GCB-040`/`GCB-041`) while the laser-*count*
+   conflict itself is filed as `GCB-043`, not decided here.
+2. **Now**, scope the real, currently-nonexistent gap: what would
    a laser/modulator design need to look like to satisfy
    `optical_geometry_spec.md`'s locked `N=64`/`L=16` Phase-II sizing —
    starting from "is this still N discrete per-channel sources, scaled

@@ -65,27 +65,45 @@ territory, say so and stop.
    question list and candidate directions, not a finished laser-bank
    design — that's this repo's eventual deliverable, not its first one.
 
-## RECONCILIATION STATE — V1 (hypothesis not yet checked by a session)
+## RECONCILIATION STATE — V2 (2026-09-13: hypothesis REFUTED by careful reading; Part 9 corrected; GCB-043 filed)
 
-**Working hypothesis (stated in README.md, not yet confirmed or
-refuted by direct, careful reading of all three source sections in one
-sitting):**
+**The V1 hypothesis above was wrong.** Careful reading of all three
+source sections together, plus both documents' own self-declared "Task
+3" scope labels, shows `bench_emulation_parameters.md` and
+`task3_physical_bom.md` describe **the same Phase-I bench**, not two
+separate sub-experiments — `02_receiver_architecture.md`'s "Phase I —
+Guaranteed Bench" section states one combined purpose (proving
+summation *and* ratiometric-cancellation together), not two. **The
+real finding: the two documents disagree on laser count** for that one
+bench — 4–8 independent per-leaf diodes
+(`bench_emulation_parameters.md` §2.1–2.2) vs. one diode split via a
+1×8 PM splitter (`task3_physical_bom.md` §1–§2, whose own §2 calls the
+splitter network an "8×8 unitary-mesh bench coupling emulation" —
+confirmed a passive single-wavelength proxy, not a real WDM claim;
+`TKT-033`'s no-real-WDM finding still stands).
 
-| | Combiner-tree bench | Readout-calibration bench |
-|---|---|---|
-| Source | `bench_emulation_parameters.md` §2.1–2.2 | `task3_physical_bom.md` §1 |
-| Laser count | 4 (min) – 8 (target), one per leaf | 1 (`GCB-LSR-01`, `[CANDIDATE]`) |
-| Modulation | Direct laser intensity modulation, 8-bit/256-level, one DAC channel each | External linear VOA (`GCB-VOA-01`, decided `TKT-028`), one DAC + driver chain |
-| Wavelength | ~1310 nm (O-band), DFB or FP | 1310 nm, DFB, `[CANDIDATE]` |
-| Feeds | The fused-fiber power-summing combiner tree (tests summation) | Tap 0 / Tap K ratiometric readout (tests ENOB/cancellation) |
+**Done:**
+- `gcb-wiki/16_hardware_parts_systems_specification.md` Part 9
+  corrected (both the detailed entry and the summary table row) to
+  describe this accurately — Phase I partially real with an open
+  laser-count conflict, Phase II still genuinely CONCEPT ONLY. The
+  stale "Known documentation gaps" item 2 also corrected.
+- `gcb-wiki/appendices/silicon-and-package-detail.md`'s Part 9 row and
+  diagram label corrected to match.
+- `gcb-wiki/intent.md` §0's blocking-question list corrected to the
+  precise finding (not "two compatible experiments").
+- **`GCB-043` filed** (`gcb-workspaces/backlog/`) — the laser-count
+  conflict itself, for Architect disposition. Not resolved here, per
+  Hard Rule 2 below and this program's standing discipline against
+  unilaterally picking a side in a real architecture conflict.
+- This repo's own `README.md` and `EXTERNAL_AI_BRIEFING.md` updated to
+  match (the "two compatible apparatus" framing removed).
 
-**What's real so far:** both tables above, each internally detailed and
-already decided for its own sub-experiment. **What's missing:** any
-document that states these are two different things, or reconciles them
-against `16_hardware_parts_systems_specification.md` Part 9's single
-"the laser bank" framing. **What's genuinely zero-spec:** the Phase-II
-`N=64` integrated array's optical source — confirmed by direct grep of
+**What's still genuinely zero-spec, unchanged:** the Phase-II `N=64`
+integrated array's optical source — confirmed by direct grep of
 `optical_geometry_spec.md`, zero matches on wavelength/laser/O-band.
+**This is this repo's remaining open deliverable** (mandate item 3,
+above) — not yet started.
 
 ## Evidence files
 
