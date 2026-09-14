@@ -65,6 +65,43 @@ territory, say so and stop.
    question list and candidate directions, not a finished laser-bank
    design — that's this repo's eventual deliverable, not its first one.
 
+## RECONCILIATION STATE — V3 (2026-09-13: Deliverable 2 done — Phase-II scoping produced, `PHASE2_SCOPING.md`)
+
+**Deliverable 2 (mandate item 3) is now done.** `PHASE2_SCOPING.md`
+(new, this pass) produces the scoped question list and candidate
+directions the mandate asks for, starting from `optical_geometry_spec.md`'s
+locked digital envelope (`N=64`, `L=16`, `T_fire`=500 ps/2.0 GHz, 1040
+operand codes/fire). Four real findings, all tagged and none decided
+unilaterally:
+
+1. Phase-I's VOA modulator choice (`TKT-028`) cannot carry forward to
+   Phase-II — its own stated rationale ("bandwidth only needs the bench's
+   low-rate fire cadence") is directly contradicted by Phase-II's locked
+   2.0 GHz `T_fire`. A GHz-class modulator (MZI/ring) is required instead
+   — a real architecture discontinuity, not a scale-up of the same part.
+2. Modulator/driver *count* jumps ~130× from Phase-I's largest config
+   (N=8) to Phase-II's 1040 operand channels/fire — `optical_geometry_
+   spec.md` itself leaves "how the operands reach the modulator bus" an
+   explicit black box.
+3. Reusing `gcb-lumen`'s real FDTD per-junction loss figure (≈1.96 dB,
+   `LUMEN-FDTD`) against a 1024-way distribution tree gives a ≈19.6 dB
+   splitting-loss floor — a genuine, arithmetic-only (no new experiment)
+   link-budget red flag for a single-source Phase-II architecture.
+4. Phase-I's 1310 nm O-band wavelength is a reasonable carry-forward
+   assumption for Phase-II, not itself a stated requirement anywhere.
+
+**Not resolved by this pass** (exploratory only, per Hard Rule 5): which
+modulator family, how many sources, or how the operand-to-bus mapping
+works. Filed as open questions for the Architect / `gcb-pic-core`'s own
+future work, same posture as `GCB-043`.
+
+**This repo's mandate (both deliverables) is now substantially complete.**
+Remaining natural follow-on, not started: a `gcb-pic-core` grep to check
+whether question 1 above (modulator family) already has an answer
+somewhere this repo didn't check (out of this repo's own assigned scope
+per Hard Rule 4's sibling-repo boundary, but the grep itself is cheap and
+was flagged, not performed, this pass).
+
 ## RECONCILIATION STATE — V2 (2026-09-13: hypothesis REFUTED by careful reading; Part 9 corrected; GCB-043 filed)
 
 **The V1 hypothesis above was wrong.** Careful reading of all three

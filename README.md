@@ -77,14 +77,25 @@ digital sizing.
    describe what's real for Phase I (a documentation-accuracy fix,
    same category as `GCB-040`/`GCB-041`) while the laser-*count*
    conflict itself is filed as `GCB-043`, not decided here.
-2. **Now**, scope the real, currently-nonexistent gap: what would
+2. ~~**Now**, scope the real, currently-nonexistent gap: what would
    a laser/modulator design need to look like to satisfy
    `optical_geometry_spec.md`'s locked `N=64`/`L=16` Phase-II sizing —
    starting from "is this still N discrete per-channel sources, scaled
    up 8x/16x, or does 64 channels force a genuinely different
    architecture (actual WDM, a laser array, a different combiner
    topology)?" — a real open question, not a component to spec in
-   isolation from the answer.
+   isolation from the answer.~~ **Done, 2026-09-13**: see
+   [`PHASE2_SCOPING.md`](PHASE2_SCOPING.md) — a scoped question list,
+   not a finished design, per this repo's own exploratory mandate. Four
+   real findings: Phase-I's VOA modulator choice cannot carry forward
+   (Phase-II's locked 2.0 GHz `T_fire` contradicts the VOA's own
+   low-rate rationale); modulator/driver count jumps ~130× from Phase-I's
+   largest config; reusing `gcb-lumen`'s real FDTD loss figure against a
+   1024-way distribution tree gives a ≈19.6 dB splitting-loss floor,
+   flagged as a real link-budget concern; the 1310 nm wavelength carries
+   forward only as an assumption, not a stated Phase-II requirement.
+   None of these are decided here — filed as open questions, same
+   posture as `GCB-043`.
 
 ## Not the source of truth
 
